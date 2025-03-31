@@ -14,16 +14,15 @@ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
-Circe. If not, see <https://www.gnu.org/licenses/>. 
+Circe. If not, see <https://www.gnu.org/licenses/>.
 
 */
 
 mod lexer;
 mod parser;
 
-pub use lexer::{Lexer, Token, LexerError};
+pub use lexer::{Lexer, LexerError, Token};
 pub use parser::{
-  Parser, ParseNode, ParserError, Command,
-  CommandComponent, HowToStatement, WhatIsStatement,
-  HowToCommand
+    Command, CommandComponent, HowToStatement, ParseNode, Parser, ParserError, WhatIsCommand,
+    WhatIsStatement,
 };

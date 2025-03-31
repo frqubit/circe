@@ -14,54 +14,82 @@ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
-Circe. If not, see <https://www.gnu.org/licenses/>. 
+Circe. If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-
-use cce_ast as ast;
 use crate::nodes::*;
+use cce_ast as ast;
 
 pub fn convert(program: Vec<ast::ParseNode>) -> Vec<ProgramNode> {
-  program.into_iter().map(|node| match node {
-    ast::ParseNode::Command(command) => ProgramNode::Command(convert_command(command)),
-    ast::ParseNode::HowToStatement(howto) => ProgramNode::HowTo(convert_howto(howto)),
-    ast::ParseNode::WhatIsStatement(whatis) => ProgramNode::WhatIs(convert_whatis(whatis))
-  }).collect()
+    program
+        .into_iter()
+        .map(|node| match node {
+            ast::ParseNode::Command(command) => ProgramNode::Command(convert_command(command)),
+            ast::ParseNode::HowToStatement(howto) => ProgramNode::HowTo(convert_howto(howto)),
+            ast::ParseNode::WhatIsStatement(whatis) => ProgramNode::WhatIs(convert_whatis(whatis)),
+        })
+        .collect()
 }
 
 fn convert_command(command: ast::Command) -> CommandNode {
-  CommandNode {
-    command: command.components.into_iter().map(convert_command_component).collect(),
-    modifiers: command.modifiers.into_iter().map(|modifier| modifier.into_iter().map(convert_command_component).collect()).collect()
-  }
+    CommandNode {
+        command: command
+            .components
+            .into_iter()
+            .map(convert_command_component)
+            .collect(),
+        modifiers: command
+            .modifiers
+            .into_iter()
+            .map(|modifier| {
+                modifier
+                    .into_iter()
+                    .map(convert_command_component)
+                    .collect()
+            })
+            .collect(),
+    }
 }
 
 fn convert_command_component(component: ast::CommandComponent) -> CommandComponent {
-  match component {
-    ast::CommandComponent::Literal(literal) => CommandComponent::Literal(literal),
-    ast::CommandComponent::Keyword(keyword) => CommandComponent::Keyword(keyword),
-    ast::CommandComponent::Slot(slot) => CommandComponent::Slot(slot)
-  }
+    match component {
+        ast::CommandComponent::Literal(literal) => CommandComponent::Literal(literal),
+        ast::CommandComponent::Keyword(keyword) => CommandComponent::Keyword(keyword),
+        ast::CommandComponent::Slot(slot) => CommandComponent::Slot(slot),
+        ast::CommandComponent::BackRef(backref) => CommandComponent::BackRef(backref),
+    }
 }
 
 fn convert_howto(howto: ast::HowToStatement) -> HowToNode {
-  HowToNode {
-    signature: howto.signature.into_iter().map(convert_command_component).collect(),
-    body: howto.body.into_iter().map(convert_howto_command).collect()
-  }
+    HowToNode {
+        signature: howto
+            .signature
+            .into_iter()
+            .map(convert_command_component)
+            .collect(),
+        body: howto.body.into_iter().map(convert_command).collect(),
+    }
 }
 
-fn convert_howto_command(command: ast::HowToCommand) -> HowToCommand {
-  match command {
-    ast::HowToCommand::HighLevel(command) => HowToCommand::HighLevel(convert_command(command)),
-    ast::HowToCommand::LowLevel(lowlevel) => HowToCommand::LowLevel(lowlevel)
-  }
+fn convert_whatis_command(command: ast::WhatIsCommand) -> WhatIsCommand {
+    match command {
+        ast::WhatIsCommand::Command(command) => WhatIsCommand::Command(convert_command(command)),
+        ast::WhatIsCommand::Final(lowlevel) => WhatIsCommand::Final(lowlevel),
+    }
 }
 
 fn convert_whatis(whatis: ast::WhatIsStatement) -> WhatIsNode {
-  WhatIsNode {
-    signature: whatis.signature.into_iter().map(convert_command_component).collect(),
-    body: whatis.body.into_iter().map(convert_command).collect()
-  }
+    WhatIsNode {
+        signature: whatis
+            .signature
+            .into_iter()
+            .map(convert_command_component)
+            .collect(),
+        body: whatis
+            .body
+            .into_iter()
+            .map(convert_whatis_command)
+            .collect(),
+    }
 }

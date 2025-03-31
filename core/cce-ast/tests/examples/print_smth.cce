@@ -1,0 +1,8 @@
+print 'Hello, world!' to the console.
+
+howto print a string to the console?
+- use the print command | %1 being &'a string'
+.
+
+whatis the print command?
+$print("%1")$.

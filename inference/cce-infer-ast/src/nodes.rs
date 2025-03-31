@@ -14,7 +14,7 @@ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
-Circe. If not, see <https://www.gnu.org/licenses/>. 
+Circe. If not, see <https://www.gnu.org/licenses/>.
 
 */
 
@@ -22,38 +22,39 @@ use cce_llast::ast::*;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum ProgramNode {
-  Command(CommandNode),
-  HowTo(HowToNode),
-  WhatIs(WhatIsNode)
+    Command(CommandNode),
+    HowTo(HowToNode),
+    WhatIs(WhatIsNode),
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct CommandNode {
-  pub command: Vec<CommandComponent>,
-  pub modifiers: Vec<Vec<CommandComponent>>
+    pub command: Vec<CommandComponent>,
+    pub modifiers: Vec<Vec<CommandComponent>>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct HowToNode {
-  pub signature: Vec<CommandComponent>,
-  pub body: Vec<HowToCommand>
+    pub signature: Vec<CommandComponent>,
+    pub body: Vec<CommandNode>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct WhatIsNode {
-  pub signature: Vec<CommandComponent>,
-  pub body: Vec<CommandNode>
+    pub signature: Vec<CommandComponent>,
+    pub body: Vec<WhatIsCommand>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum HowToCommand {
-  HighLevel(CommandNode),
-  LowLevel(Vec<LLTopStatement>)
+pub enum WhatIsCommand {
+    Command(CommandNode),
+    Final(String),
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum CommandComponent {
-  Literal(String),
-  Keyword(String),
-  Slot(String)
+    Literal(String),
+    Keyword(String),
+    Slot(String),
+    BackRef(String),
 }
