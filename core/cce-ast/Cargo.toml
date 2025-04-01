@@ -8,5 +8,4 @@ edition = "2021"
 [dependencies]
 thiserror = "1.0.40"
 cce-stream = { path = "../cce-stream", version = "0.0.1" }
-cce-llast = { path = "../../lowlevel/cce-llast", version = "0.0.1" }
 circelang-hash = { path = "../circelang-hash", version = "0.0.1" }

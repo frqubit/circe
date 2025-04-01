@@ -5,8 +5,6 @@ members = [
   "core/circelang-hash",
   "core/circelang-hash-proc",
 
-  "lowlevel/cce-llast",
-
   "inference/cce-infer",
   "inference/cce-infer-ast",
   "inference/circelang-db",

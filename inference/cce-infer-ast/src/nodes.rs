@@ -18,8 +18,6 @@ Circe. If not, see <https://www.gnu.org/licenses/>.
 
 */
 
-use cce_llast::ast::*;
-
 #[derive(Debug, Clone, PartialEq)]
 pub enum ProgramNode {
     Command(CommandNode),
